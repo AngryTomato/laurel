@@ -47,31 +47,76 @@ sys_user
 
 |  列  | 类型 | 备注 |
 | :--: | :--: | :-: |
-|  |      |      |
+| id | bigint(20) | 自增id，主键 |
+| username | varchar(255) | 用户名 |
+| password | varchar(255) | 用户登录密码 |
+| email | varchar(255) | 电子邮件 |
+| public_key | blob | 账户的公钥 |
+| create_time | datetime | 创建时间 |
+| update_time | datetime | 更新时间 |
+| is_deleted  |     bit      | 是否被删除：0-未删除，1-已删除 |
+| uuid | varchar(255) | 用户的uuid |
 
 sys_role
 
-|  列  | 类型 | 备注 |
-| :--: | :--: | :--: |
-|      |      |      |
+|     列      |     类型     |              备注              |
+| :---------: | :----------: | :----------------------------: |
+|     id      |  bigint(20)  |          自增id，主键          |
+|  role_name  | varchar(255) |            角色名称            |
+| create_time |   datetime   |            创建时间            |
+| update_time |   datetime   |            更新时间            |
+| is_deleted  |     bit      | 是否被删除：0-未删除，1-已删除 |
+|    uuid     | varchar(255) |           角色的uuid           |
 
 sys_permission
 
-|  列  | 类型 | 备注 |
-| :--: | :--: | :--: |
-|      |      |      |
+|       列        |     类型     |              备注              |
+| :-------------: | :----------: | :----------------------------: |
+|       id        |  bigint(20)  |          自增id，主键          |
+| permission_name | varchar(255) |            权限名称            |
+|   create_time   |   datetime   |            创建时间            |
+|   update_time   |   datetime   |            更新时间            |
+|   is_deleted    |     bit      | 是否被删除：0-未删除，1-已删除 |
+|      uuid       | varchar(255) |              uuid              |
 
 sys_role_user
 
-| 列   | 类型 | 备注 |
-| ---- | ---- | ---- |
-|      |      |      |
+|     列      |     类型     |              备注              |
+| :---------: | :----------: | :----------------------------: |
+|     id      |  bigint(20)  |          自增id，主键          |
+|   role_id   |  bigint(20)  |             角色id             |
+|   user_id   |  bigint(20)  |             用户id             |
+| create_time |   datetime   |            创建时间            |
+| update_time |   datetime   |            更新时间            |
+| is_deleted  |     bit      | 是否被删除：0-未删除，1-已删除 |
+|    uuid     | varchar(255) |              uuid              |
 
 sys_permission_role
 
-| 列   | 类型 | 备注 |
-| ---- | ---- | ---- |
-|      |      |      |
+|      列       |     类型     |              备注              |
+| :-----------: | :----------: | :----------------------------: |
+|      id       |  bigint(20)  |          自增id，主键          |
+| permission_id |  bigint(20)  |             权限id             |
+|    role_id    |  bigint(20)  |             角色id             |
+|  create_time  |   datetime   |            创建时间            |
+|  update_time  |   datetime   |            更新时间            |
+|  is_deleted   |     bit      | 是否被删除：0-未删除，1-已删除 |
+|     uuid      | varchar(255) |              uuid              |
+
+sys_storage
+
+|        列        |     类型     |              备注              |
+| :--------------: | :----------: | :----------------------------: |
+|        id        |  bigint(20)  |          自增id，主键          |
+| storage_username | varchar(255) |          存储的用户名          |
+| encrypt_password |     blob     |       经过公钥加密的密码       |
+|       site       | varchar(255) |            网站地址            |
+|     user_id      |  bigint(20)  |       对应本系统的用户id       |
+|   description    | varchar(255) |            备注描述            |
+|   create_time    |   datetime   |            创建时间            |
+|   update_time    |   datetime   |            更新时间            |
+|    is_deleted    |     bit      | 是否被删除：0-未删除，1-已删除 |
+|       uuid       | varchar(255) |              uuid              |
 
 
 
