@@ -1,4 +1,9 @@
 # laurel
+
+@Version 0.1
+
+@Author AngryTomato
+
 Storage my password
 
 ## 1.概要
@@ -33,7 +38,7 @@ Storage my password
 
 - 超级管理员：用于创建管理员账号、用于创建角色、创建权限、对应角色和权限；
 - 管理员：用于重置普通用户密码；
-- 普通用户：普通用户，具有录入、修改面密码功能；
+- 普通用户：普通用户，具有录入、修改密码功能；
 
 #### 2.1.3 权限和角色的对应关系：
 
@@ -118,11 +123,137 @@ sys_storage
 |    is_deleted    |     bit      | 是否被删除：0-未删除，1-已删除 |
 |       uuid       | varchar(255) |              uuid              |
 
+### 2.3 接口设计（对接口要做访问权限控制）
 
+#### 2.3.1 注册用户
 
+```
+POST /users
+```
 
+#### 2.3.2 获取用户
 
+获取所有用户
 
+```
+GET /users
+```
+
+获取特定用户
+
+```
+GET /users/${uid}
+```
+
+#### 2.3.3 修改用户信息
+
+```
+PUT /users/${uid}
+```
+
+#### 2.3.4 删除用户
+
+```
+DELETE /users/${uid}
+```
+
+#### 2.3.5 新增存储的密码
+
+```
+POST /users/${uid}/storages
+```
+
+#### 2.3.6 获取存储的密码
+
+获取用户${uid}所有密码
+
+```
+GET /users/${uid}/storages
+```
+
+获取用户${uid}特定密码
+
+```
+GET /users/${uid}/storages/${sid}
+```
+
+#### 2.3.7 修改存储的密码
+
+```
+PUT /users/${uid}/storages/${sid}
+```
+
+#### 2.3.8 增加权限
+
+```
+POST /permissions
+```
+
+#### 2.3.9 获取权限
+
+```
+GET /permissions
+```
+
+#### 2.3.10 删除权限
+
+```
+DELETE /permissions
+```
+
+#### 2.3.11 增加角色
+
+```
+POST /roles
+```
+
+#### 2.3.12 获取所有角色
+
+```
+GET /roles
+```
+
+#### 2.3.13 删除角色
+
+```
+DELETE /roles
+```
+
+#### 2.3.14 修改角色
+
+```
+PUT /roles
+```
+
+#### 2.3.15 绑定角色和权限
+
+```
+POST /roles/${rid}/permissions
+```
+
+#### 2.3.16 修改角色和权限绑定
+
+```
+PUT /roles/${rid}/permissions
+```
+
+#### 2.3.16 新增管理员账户
+
+```
+POST /admins
+```
+
+#### 2.3.17 删除管理员账户
+
+```
+DELETE /admins/${aid}
+```
+
+#### 2.3.18 重置普通账户密码
+
+```
+PUT /admins/${aid}/users/${uid}
+```
 
 
 
