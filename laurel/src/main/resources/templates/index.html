@@ -1,10 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>登录页面</title>
 </head>
 <body>
-    登录页面
+    <div>
+        <form th:action="@{/auth}" th:method="post">
+            <div>
+                <input type="text" placeholder="账号">
+            </div>
+            <div>
+                <input type="text" placeholder="密码">
+            </div>
+
+            <div>
+                <button type="submit">登录</button>
+            </div>
+        </form>
+    </div>
 </body>
 </html>
