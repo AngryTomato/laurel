@@ -7,28 +7,30 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-@Table(name = "sys_user")
 @Entity
+@Table(name = "sys_storage")
 @Data
-public class UserDomain implements Serializable {
+public class Storage implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
-
-    @Column(name = "id", nullable = false, updatable = false)
+    @Column(name = "id", updatable = false, nullable = false)
     private Long id;
 
-    @Column(name = "username")
-    private String username;
+    @Column(name = "storage_username")
+    private String storageUsername;
 
-    @Column(name = "password")
-    private String password;
+    @Column(name = "encrypt_password", columnDefinition = "blob")
+    private byte[] encryptPassword;
 
-    @Column(name = "email")
-    private String email;
+    @Column(name = "site")
+    private String site;
 
-    @Column(name = "public_key", columnDefinition = "blob")
-    private byte[] publicKey;
+    @Column(name = "user_id")
+    private Long userId;
+
+    @Column(name = "description")
+    private String description;
 
     @Column(name = "create_time")
     private Timestamp createTime;
@@ -41,5 +43,4 @@ public class UserDomain implements Serializable {
 
     @Column(name = "uuid")
     private String uuid;
-
 }
