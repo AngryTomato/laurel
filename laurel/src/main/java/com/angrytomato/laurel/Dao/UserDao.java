@@ -9,5 +9,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserDao extends JpaRepository<User, Long> {
     @Query(value = "select u from User u where u.username=:username")
-    User findUserByUsername(@Param("username") String username);
+    User findByUsername(@Param("username") String username);
+
+    boolean existsByUsername(String username);
 }

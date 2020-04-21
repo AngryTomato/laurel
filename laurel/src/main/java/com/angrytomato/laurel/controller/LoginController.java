@@ -9,11 +9,21 @@ import sun.misc.Request;
 public class LoginController {
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String loginPage() {
-        return "index";
+        return "signin";
     }
 
-    @RequestMapping(value = "/welcome", method = RequestMethod.GET)
-    public String welcome() {
-        return "welcome";
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public String rootPage() {
+        return "signin";
+    }
+
+    @RequestMapping(value = "/success", method = RequestMethod.GET)
+    public String successPage() {
+        return "success";
+    }
+
+    @RequestMapping(value = "/success", method = RequestMethod.POST)
+    public String success() {
+        return "success";
     }
 }

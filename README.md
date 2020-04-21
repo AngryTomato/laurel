@@ -127,8 +127,16 @@ sys_storage
 
 #### 2.3.1 注册用户
 
+访问注册页面：
+
 ```
-POST /users
+GET /regist
+```
+
+注册：
+
+```
+POST /signup
 ```
 
 #### 2.3.2 获取用户
