@@ -1,6 +1,8 @@
 package com.angrytomato.laurel.service.impl;
 
+import com.angrytomato.laurel.Dao.RoleDao;
 import com.angrytomato.laurel.Dao.UserDao;
+import com.angrytomato.laurel.domain.Role;
 import com.angrytomato.laurel.domain.User;
 import com.angrytomato.laurel.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +25,9 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private RoleDao roleDao;
 
     @Override
     public boolean isMatch(String rawPasswords, String encryptPassword) {
@@ -66,16 +71,27 @@ public class UserServiceImpl implements UserService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         System.out.println(username);
         String getUsername = username;
-        List<SimpleGrantedAuthority> simpleGrantedAuthorities = new ArrayList<>();
-        simpleGrantedAuthorities.add(new SimpleGrantedAuthority("role_user"));
         User user = findByUsername(username);
         if (user == null) {
-            throw new UsernameNotFoundException("用户不存在！");
+            throw new UsernameNotFoundException("------user not found------");
         }
+        List<SimpleGrantedAuthority> simpleGrantedAuthorities = getGrantedAuthorities(user);
+
         String storagePassword  = user.getPassword();
 
         org.springframework.security.core.userdetails.User securityUser = new org.springframework.security.core.userdetails.User(username, storagePassword, simpleGrantedAuthorities);
 
         return securityUser;
     }
+
+    private List<SimpleGrantedAuthority> getGrantedAuthorities(User user) {
+        List<Role> roles = roleDao.findRoleByUserId(user.getId());
+        List<SimpleGrantedAuthority> simpleGrantedAuthorities = new ArrayList<>();
+        for (Role role : roles) {
+            simpleGrantedAuthorities.add(new SimpleGrantedAuthority(role.getRoleName()));
+        }
+        return simpleGrantedAuthorities;
+    }
+
+
 }
