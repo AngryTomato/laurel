@@ -18,6 +18,8 @@ Storage my password
 
 本项目是基于SpringBoot，使用Spring Security做权限控制。前端页面采用Bootstrap，使用Thymeleaf做为模板引擎。加解密算法采用RSA2048。
 
+打算第一期先做普通用户相关功能。第二期做管理员和超级管理员相关功能（*标的都是第二期需要做的）。
+
 ## 2.总体设计
 
 ### 2.1 权限设计
@@ -125,7 +127,7 @@ sys_storage
 
 ### 2.3 接口设计（对接口要做访问权限控制）
 
-#### 2.3.1 注册用户
+#### 2.3.1 注册登录用户
 
 访问注册页面：
 
@@ -139,18 +141,30 @@ GET /regist
 POST /signup
 ```
 
-#### 2.3.2 获取用户
+#### 2.3.2 获取用户(*)
 
-获取所有用户
-
-```
-GET /users
-```
-
-获取特定用户
+获取所有普通用户
 
 ```
-GET /users/${uid}
+GET /admins/users
+```
+
+获取特定普通用户
+
+```
+GET /admins/users/${uid}
+```
+
+获取管理员用户
+
+```
+GET /superadmins/admins
+```
+
+获取特定管理员账户
+
+```
+GET /superadmins/admins/${aid}
 ```
 
 #### 2.3.3 修改用户信息
@@ -191,73 +205,73 @@ GET /users/${uid}/storages/${sid}
 PUT /users/${uid}/storages/${sid}
 ```
 
-#### 2.3.8 增加权限
+#### 2.3.8 增加权限(*)
 
 ```
-POST /permissions
+POST /superadmins/permissions
 ```
 
-#### 2.3.9 获取权限
+#### 2.3.9 获取权限(*)
 
 ```
-GET /permissions
+GET /superadmins/permissions
 ```
 
-#### 2.3.10 删除权限
+#### 2.3.10 删除权限(*)
 
 ```
-DELETE /permissions
+DELETE /superadmins/permissions/${pid}
 ```
 
-#### 2.3.11 增加角色
+#### 2.3.11 增加角色(*)
 
 ```
-POST /roles
+POST /superadmins/roles
 ```
 
-#### 2.3.12 获取所有角色
+#### 2.3.12 获取所有角色(*)
 
 ```
-GET /roles
+GET /superadmins/roles
 ```
 
-#### 2.3.13 删除角色
+#### 2.3.13 删除角色(*)
 
 ```
-DELETE /roles
+DELETE /superadmins/roles
 ```
 
-#### 2.3.14 修改角色
+#### 2.3.14 修改角色(*)
 
 ```
-PUT /roles
+PUT /superadmins/roles
 ```
 
-#### 2.3.15 绑定角色和权限
+#### 2.3.15 绑定角色和权限(*)
 
 ```
-POST /roles/${rid}/permissions
+POST /superadmins/roles/${rid}/permissions
 ```
 
-#### 2.3.16 修改角色和权限绑定
+#### 2.3.16 修改角色和权限绑定(*)
 
 ```
-PUT /roles/${rid}/permissions
+PUT /superadmins/roles/${rid}/permissions
 ```
 
-#### 2.3.16 新增管理员账户
+#### 2.3.16 新增管理员账户(*)
 
 ```
-POST /admins
+POST /superadmins/admins
 ```
 
-#### 2.3.17 删除管理员账户
+#### 2.3.17 删除管理员账户(*)
 
 ```
-DELETE /admins/${aid}
+DELETE /superadmins/admins/${aid}
 ```
 
-#### 2.3.18 重置普通账户密码
+#### 2.3.18 重置普通账户密码(*)
 
 ```
 PUT /admins/${aid}/users/${uid}
