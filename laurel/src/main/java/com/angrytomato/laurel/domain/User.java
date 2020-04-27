@@ -27,8 +27,8 @@ public class User implements Serializable {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "public_key", columnDefinition = "blob")
-    private byte[] publicKey;
+    @Column(name = "encrypt_key", columnDefinition = "blob")
+    private byte[] encryptKey;
 
     @Column(name = "create_time")
     private Timestamp createTime;
