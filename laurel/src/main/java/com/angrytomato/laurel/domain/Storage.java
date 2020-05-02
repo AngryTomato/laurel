@@ -17,6 +17,9 @@ public class Storage implements Serializable {
     @Column(name = "id", updatable = false, nullable = false)
     private Long id;
 
+    @Column(name = "project_name")
+    private String projectName;
+
     @Column(name = "storage_username")
     private String storageUsername;
 

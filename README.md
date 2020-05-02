@@ -117,8 +117,9 @@ sys_storage
 |        列        |     类型     |              备注              |
 | :--------------: | :----------: | :----------------------------: |
 |        id        |  bigint(20)  |          自增id，主键          |
+|   project_name   | varchar(255) |      项目名称（用于搜索）      |
 | storage_username | varchar(255) |          存储的用户名          |
-| encrypt_password |     blob     |       经过公钥加密的密码       |
+| encrypt_password |     blob     |         经过加密的密码         |
 |       site       | varchar(255) |            网站地址            |
 |     user_id      |  bigint(20)  |       对应本系统的用户id       |
 |   description    | varchar(255) |            备注描述            |
