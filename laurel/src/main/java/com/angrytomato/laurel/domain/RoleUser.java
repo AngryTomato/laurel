@@ -30,7 +30,7 @@ public class RoleUser implements Serializable {
     private Timestamp updateTime;
 
     @Column(name = "is_deleted")
-    private boolean isDeleted;
+    private Boolean isDeleted;
 
     @Column(name = "uuid")
     private String uuid;

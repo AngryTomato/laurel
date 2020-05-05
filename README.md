@@ -61,6 +61,7 @@ sys_user
 | password | varchar(255) | 用户登录密码 |
 | email | varchar(255) | 电子邮件 |
 | encrypt_key | blob | 经过加密的对称秘钥（AES 256） |
+| iv | blob | 经过加密的16字节的向量 |
 | create_time | datetime | 创建时间 |
 | update_time | datetime | 更新时间 |
 | is_deleted  |     bit      | 是否被删除：0-未删除，1-已删除 |
@@ -144,6 +145,18 @@ GET /regist
 POST /signup
 ```
 
+访问登录页面：
+
+```
+GET /login
+```
+
+登录（这个由SpringSecurity配置）：
+
+```
+.loginProcessingUrl("/signin")
+```
+
 #### 2.3.2 获取用户(*)
 
 获取所有普通用户
@@ -172,11 +185,25 @@ GET /superadmins/admins/${aid}
 
 #### 2.3.3 修改用户信息
 
+访问修改用户信息页面：
+
 ```
-PUT /users/${uid}
+GET /user/profile
 ```
 
-#### 2.3.4 删除用户
+获取当前用户信息：
+
+```
+GET /user/info
+```
+
+修改用户信息:
+
+```
+PUT /profile
+```
+
+#### 2.3.4 删除用户(*)
 
 ```
 DELETE /users/${uid}
@@ -184,28 +211,36 @@ DELETE /users/${uid}
 
 #### 2.3.5 新增存储的密码
 
+访问新增密码页面
+
 ```
-POST /users/${uid}/storages
+GET /user/storage
+```
+
+新增密码
+
+```
+POST /storage
 ```
 
 #### 2.3.6 获取存储的密码
 
-获取用户${uid}所有密码
+访问密码列表页面（即“项目”页面）
 
 ```
-GET /users/${uid}/storages
+GET /user/projects
 ```
 
-获取用户${uid}特定密码
+获取用户${uid}密码列表
 
 ```
-GET /users/${uid}/storages/${sid}
+GET /projects/search?query=${condition}
 ```
 
 #### 2.3.7 修改存储的密码
 
 ```
-PUT /users/${uid}/storages/${sid}
+PUT /projects/modify?id=${sid}
 ```
 
 #### 2.3.8 增加权限(*)

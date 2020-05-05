@@ -69,7 +69,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        System.out.println(username);
         String getUsername = username;
         User user = findByUsername(username);
         if (user == null) {

@@ -30,6 +30,9 @@ public class User implements Serializable {
     @Column(name = "encrypt_key", columnDefinition = "blob")
     private byte[] encryptKey;
 
+    @Column(name = "iv", columnDefinition = "blob")
+    private byte[] iv;
+
     @Column(name = "create_time")
     private Timestamp createTime;
 
@@ -37,7 +40,7 @@ public class User implements Serializable {
     private Timestamp updateTime;
 
     @Column(name = "is_deleted")
-    private boolean isDeleted;
+    private Boolean isDeleted;
 
     @Column(name = "uuid")
     private String uuid;

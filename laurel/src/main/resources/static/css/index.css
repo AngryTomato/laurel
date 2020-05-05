@@ -1,0 +1,12 @@
+.jumbotron {
+    background-image: linear-gradient(#239FFB, #0CC4FC);
+}
+
+.jumbotron-font {
+    color: white !important;
+}
+
+.index-image {
+    max-width: 668px;
+    width: 100%;
+}

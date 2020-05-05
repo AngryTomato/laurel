@@ -16,18 +16,13 @@ public class LoginController {
         return "signin";
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String rootPage() {
-        return "signin";
-    }
-
     @RequestMapping(value = "/success", method = RequestMethod.GET)
     public String successPage() {
-        return "success";
+        return "profile";
     }
 
     @RequestMapping(value = "/success", method = RequestMethod.POST)
     public String success() {
-        return "redirect:success";
+        return "redirect:/user/profile";
     }
 }

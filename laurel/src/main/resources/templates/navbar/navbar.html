@@ -1,0 +1,33 @@
+<nav class="navbar  navbar-expand-md navbar-light bg-light" style="margin-bottom: 10px;" th:fragment="navbar">
+    <a class="navbar-brand" th:href="@{/}">
+        <img th:src="@{/image/logo.png}" height="40" class="" alt="Laurel">
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+            aria-controls="navbarCollapse" aria-expanded="true" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item" sec:authorize="!isAuthenticated()">
+                <a class="nav-link" th:href="@{/}">主页</a>
+            </li>
+            <li class="nav-item" sec:authorize="isAuthenticated()">
+                <a class="nav-link" href="#">新增项目</a>
+            </li>
+        </ul>
+        <!-- justify-content-end 使其在navbar的右侧 -->
+        <ul class="navbar-nav justify-content-end">
+            <li class="nav-item" sec:authorize="!isAuthenticated()">
+                <a class="nav-link" th:href="@{/regist}">注册</a>
+            </li>
+            <li class="nav-item" sec:authorize="!isAuthenticated()">
+                <a class="nav-link" th:href="@{/login}">登录</a>
+            </li>
+            <li class="nav-item" sec:authorize="isAuthenticated()">
+                <a class="nav-link" th:href="@{/logout}">登出</a>
+            </li>
+        </ul>
+    </div>
+</nav>
