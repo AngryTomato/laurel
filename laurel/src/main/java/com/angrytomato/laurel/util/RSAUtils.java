@@ -74,21 +74,4 @@ public class RSAUtils {
         cipher.init(Cipher.DECRYPT_MODE, privateKey);
         return cipher.doFinal(encryptedData);
     }
-
-    public static void main(String[] args) throws Exception{
-        KeyPair keyPair = genRSAKeyPair(2048);
-        PrivateKey privateKey = keyPair.getPrivate();
-        PublicKey publicKey = keyPair.getPublic();
-
-        System.out.println("privateKey:");
-        System.out.println(Base64.encodeBase64String(privateKey.getEncoded()));
-        System.out.println("publicKey:");
-        System.out.println(Base64.encodeBase64String(publicKey.getEncoded()));
-
-        String hello = "hello";
-        byte[] encrytedData = encryptData(hello.getBytes(), publicKey.getEncoded());
-        byte[] decryptedData = decryptData(encrytedData, privateKey.getEncoded());
-        System.out.println(new String(decryptedData));
-    }
-
 }

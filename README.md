@@ -200,7 +200,19 @@ GET /user/info
 修改用户信息:
 
 ```
-PUT /profile
+POST /profile
+```
+
+访问修改密码页面：
+
+```
+GET /user/password
+```
+
+修改密码：
+
+```
+POST /password
 ```
 
 #### 2.3.4 删除用户(*)
