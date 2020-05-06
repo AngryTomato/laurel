@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
     public boolean save(User user) {
         boolean isSuccess = false;
         try {
-            userDao.save(user);
+            userDao.saveAndFlush(user);
             isSuccess = true;
         } catch (Exception e) {
             e.printStackTrace();

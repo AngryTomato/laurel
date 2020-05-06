@@ -246,13 +246,13 @@ GET /user/projects
 获取用户${uid}密码列表
 
 ```
-GET /projects/search?query=${condition}
+POST /projects/details
 ```
 
 #### 2.3.7 修改存储的密码
 
 ```
-PUT /projects/modify?id=${sid}
+POST /projects/details/update
 ```
 
 #### 2.3.8 增加权限(*)

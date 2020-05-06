@@ -18,11 +18,11 @@ public class LoginController {
 
     @RequestMapping(value = "/success", method = RequestMethod.GET)
     public String successPage() {
-        return "profile";
+        return "/user/projects";
     }
 
     @RequestMapping(value = "/success", method = RequestMethod.POST)
     public String success() {
-        return "redirect:/user/profile";
+        return "redirect:/user/projects";
     }
 }

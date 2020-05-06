@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import java.util.List;
+
 @Service
 public class ProjectServiceImpl implements ProjectService {
     @Autowired
@@ -35,7 +37,7 @@ public class ProjectServiceImpl implements ProjectService {
     public boolean save(Storage storage) {
         boolean isSuccess = false;
         try {
-            projectDao.save(storage);
+            projectDao.saveAndFlush(storage);
             isSuccess = true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -94,5 +96,17 @@ public class ProjectServiceImpl implements ProjectService {
             }
         }
         return decryptedStr;
+    }
+
+    @Override
+    public List<Storage> findByUserId(Long userId) {
+        List<Storage> storageList = projectDao.findByUserId(userId);
+        return storageList;
+    }
+
+    @Override
+    public Storage findByIdAndUserId(Long id, Long userId) {
+        Storage storage = projectDao.findByIdAndUserId(id, userId);
+        return storage;
     }
 }
