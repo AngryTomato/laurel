@@ -1,6 +1,6 @@
 # laurel
 
-@Version 0.1
+@Version 1.0
 
 @Author AngryTomato
 
@@ -10,47 +10,15 @@ Storage my password
 
 产生想要开发这个项目的原因就是**1Pasword** 快要过期了，不想续费了。
 
-本项目的功能是存储密码（加密存储）。用户注册时，系统会返回用户一个由系统生成的AES密钥（暂且称为对称秘钥A），用户必须保管好该密钥。该密钥用于**存储密码**的加解密，且该密钥会加密存储在数据库中。
+本项目的功能是**"存储密码"**（加密存储）。本系统有一个RSA2048秘钥对（系统主秘钥），配置在`application.properties`中，该系统主秘钥用于加解密用户注册时生成一个AES密钥，AES经过加密后会保存在数据库中。该AES密钥用于加解密**"存储密码"**。
 
-该系统中会存在一个系统秘钥对（暂且称为非对称秘钥对B）。该密钥对用于对对称秘钥A进行加解密。
-
-生产环境采用明文配置可能会有安全性问题，因此需要对SpringBoot的`application.properties`配置项进行加密，此处我们采用的是jasypt。
-
-鉴于可能在传输过程中被截获，因此采用https的方式。
+由于在生产环境采用明文配置可能会有安全性问题，因此需要对SpringBoot的`application.properties`配置项进行加密（主要是数据库账号密码，以及配置的RSA2048秘钥对——系统主秘钥），此处我们采用的是`jasypt-spring-boot`对配置项进行加密处理。
 
 本项目是基于SpringBoot，使用Spring Security做权限控制。前端页面采用Bootstrap，使用Thymeleaf做为模板引擎。加解密算法采用RSA2048，和AES 256。
 
-打算第一期先做普通用户相关功能。第二期做管理员和超级管理员相关功能（*标的都是第二期需要做的）。
-
 ## 2.总体设计
 
-### 2.1 权限设计
-
-#### 2.1.1 权限包括
-
-- 录入密码
-- 修改密码
-- 更新对称秘钥
-- 重置本系统账号密码
-- 查询用户
-- 创建管理员账户
-- 创建角色
-- 创建权限
-- 对应角色和权限
-
-#### 2.1.2 角色包括：
-
-- 超级管理员：用于创建管理员账号、用于创建角色、创建权限、对应角色和权限；
-- 管理员：用于重置普通用户密码；
-- 普通用户：普通用户，具有录入、修改密码功能；
-
-#### 2.1.3 权限和角色的对应关系：
-
-- 超级管理员：创建管理员账户、创建角色、创建权限、对应角色和权限；
-- 普通管理员：查询用户、重置本系统账号密码；
-- 普通用户：录入密码、修改密码、修改对称秘钥（AES 256）；
-
-### 2.2 数据库表设计
+### 2.1 数据库表设计
 
 sys_user
 
@@ -129,9 +97,9 @@ sys_storage
 |    is_deleted    |     bit      | 是否被删除：0-未删除，1-已删除 |
 |       uuid       | varchar(255) |              uuid              |
 
-### 2.3 接口设计（对接口要做访问权限控制）
+### 2.2 接口设计
 
-#### 2.3.1 注册登录用户
+#### 2.2.1 注册登录
 
 访问注册页面：
 
@@ -151,39 +119,21 @@ POST /signup
 GET /login
 ```
 
-登录（这个由SpringSecurity配置）：
+登录（Security配置）：
 
 ```
-.loginProcessingUrl("/signin")
+loginProcessingUrl("/signin")
 ```
 
-#### 2.3.2 获取用户(*)
-
-获取所有普通用户
+登录成功（Security配置）：
 
 ```
-GET /admins/users
+successForwardUrl("/success")
 ```
 
-获取特定普通用户
+#### 2.2.2 修改用户信息
 
-```
-GET /admins/users/${uid}
-```
-
-获取管理员用户
-
-```
-GET /superadmins/admins
-```
-
-获取特定管理员账户
-
-```
-GET /superadmins/admins/${aid}
-```
-
-#### 2.3.3 修改用户信息
+1.用户信息修改
 
 访问修改用户信息页面：
 
@@ -203,6 +153,8 @@ GET /user/info
 POST /profile
 ```
 
+2.用户密码修改
+
 访问修改密码页面：
 
 ```
@@ -215,117 +167,51 @@ GET /user/password
 POST /password
 ```
 
-#### 2.3.4 删除用户(*)
+#### 2.2.3 操作存储的密码
 
-```
-DELETE /users/${uid}
-```
+1.新增存储密码
 
-#### 2.3.5 新增存储的密码
-
-访问新增密码页面
+访问新增密码页面：
 
 ```
 GET /user/storage
 ```
 
-新增密码
+新增密码：
 
 ```
 POST /storage
 ```
 
-#### 2.3.6 获取存储的密码
+2.存储密码查询
 
-访问密码列表页面（即“项目”页面）
+访问密码查询页面（即“项目”页面）：
 
 ```
 GET /user/projects
 ```
 
-获取用户${uid}密码列表
+查询存储密码：
+
+```
+GET /projects/search
+```
+
+获取某条密码详情：
 
 ```
 POST /projects/details
 ```
 
-#### 2.3.7 修改存储的密码
+3.修改存储的密码：
 
 ```
 POST /projects/details/update
 ```
 
-#### 2.3.8 增加权限(*)
+4.删除存储的密码：
 
 ```
-POST /superadmins/permissions
+POST /projects/details/delete
 ```
-
-#### 2.3.9 获取权限(*)
-
-```
-GET /superadmins/permissions
-```
-
-#### 2.3.10 删除权限(*)
-
-```
-DELETE /superadmins/permissions/${pid}
-```
-
-#### 2.3.11 增加角色(*)
-
-```
-POST /superadmins/roles
-```
-
-#### 2.3.12 获取所有角色(*)
-
-```
-GET /superadmins/roles
-```
-
-#### 2.3.13 删除角色(*)
-
-```
-DELETE /superadmins/roles
-```
-
-#### 2.3.14 修改角色(*)
-
-```
-PUT /superadmins/roles
-```
-
-#### 2.3.15 绑定角色和权限(*)
-
-```
-POST /superadmins/roles/${rid}/permissions
-```
-
-#### 2.3.16 修改角色和权限绑定(*)
-
-```
-PUT /superadmins/roles/${rid}/permissions
-```
-
-#### 2.3.16 新增管理员账户(*)
-
-```
-POST /superadmins/admins
-```
-
-#### 2.3.17 删除管理员账户(*)
-
-```
-DELETE /superadmins/admins/${aid}
-```
-
-#### 2.3.18 重置普通账户密码(*)
-
-```
-PUT /admins/${aid}/users/${uid}
-```
-
-
 
