@@ -100,13 +100,19 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public List<Storage> findByUserId(Long userId) {
-        List<Storage> storageList = projectDao.findByUserId(userId);
+        List<Storage> storageList = projectDao.findByUserIdAndIsDeleted(userId, false);
         return storageList;
     }
 
     @Override
     public Storage findByIdAndUserId(Long id, Long userId) {
-        Storage storage = projectDao.findByIdAndUserId(id, userId);
+        Storage storage = projectDao.findByIdAndUserIdAndIsDeleted(id, userId, false);
         return storage;
+    }
+
+    @Override
+    public List<Storage> findByCriteria(Long userId, String criteria) {
+        List<Storage> projects = projectDao.findByCriteria(userId, criteria, false);
+        return projects;
     }
 }

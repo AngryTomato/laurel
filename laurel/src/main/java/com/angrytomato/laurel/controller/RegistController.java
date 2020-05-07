@@ -2,6 +2,7 @@ package com.angrytomato.laurel.controller;
 
 import com.angrytomato.laurel.config.LaurelSecurity;
 import com.angrytomato.laurel.domain.User;
+import com.angrytomato.laurel.service.RegistService;
 import com.angrytomato.laurel.service.UserService;
 import com.angrytomato.laurel.util.AESUtils;
 import com.angrytomato.laurel.util.RSAUtils;
@@ -24,6 +25,9 @@ import java.util.Map;
 public class RegistController {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private RegistService registService;
 
     @Autowired
     private LaurelSecurity laurelSecurity;
@@ -83,7 +87,7 @@ public class RegistController {
                 user.setUuid(UuidUtils.genUuid());
 
                 if(!userService.existsByUsername(user.getUsername())) {//用户名不存在
-                    if(userService.save(user)) {//注册写入数据库成功
+                    if(registService.save(user)) {//注册写入数据库成功
                         tips.put("result", true);
                         tips.put("message", "注册成功");
                     } else {//注册写入数据库失败

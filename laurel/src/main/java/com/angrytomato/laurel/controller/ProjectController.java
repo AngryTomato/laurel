@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -59,7 +60,7 @@ public class ProjectController {
 
     @ResponseBody
     @RequestMapping(value = "/projects/details", method = RequestMethod.POST)
-    public JSONObject details(@RequestBody String requestBody, Principal principal, Model model) {
+    public JSONObject details(@RequestBody String requestBody, Principal principal) {
         String username = principal.getName();
         JSONObject jsonObject = JSONObject.parseObject(requestBody);
         String idStr = jsonObject.getString("id");
@@ -86,7 +87,7 @@ public class ProjectController {
 
     @ResponseBody
     @RequestMapping(value = "/projects/details/update", method = RequestMethod.POST)
-    public JSONObject updateDetails(@RequestBody String requestBody, Principal principal, Model model) {
+    public JSONObject updateDetails(@RequestBody String requestBody, Principal principal) {
         String username = principal.getName();
         JSONObject jsonObject = JSONObject.parseObject(requestBody);
         String idStr = jsonObject.getString("id");
@@ -124,7 +125,72 @@ public class ProjectController {
                     storage.setUpdateTime(new Timestamp(System.currentTimeMillis()));
                     if (projectService.save(storage)) {//更新到数据库成功
                         resultMap.put("result", true);
-                        resultMap.put("message", "保存成功");
+                        resultMap.put("message", "保存成功,3s后自动跳转到查询页");
+                        resultMap.put("class", "alert alert-success");
+                    }
+                }
+            }
+        }
+        return JSONObject.parseObject(JSON.toJSONString(resultMap));
+    }
+
+    @RequestMapping(value = "/projects/search", method = RequestMethod.GET)
+    public String search(HttpServletRequest request, Principal principal, Model model) {
+        String username = principal.getName();
+        String criteria = request.getParameter("query");
+
+        List<Project> projectList = new ArrayList<>();
+        if (userService.existsByUsername(username)) {//用户名存在
+            Long userId = userService.findByUsername(username).getId();
+            List<Storage> storageList = new ArrayList<>();
+            if (StringUtils.isEmpty(criteria)) {//如果查询条件为空
+                storageList = projectService.findByUserId(userId);
+            } else {
+                storageList = projectService.findByCriteria(userId, criteria);
+            }
+
+            for (int i = 0; i < storageList.size(); i++) {
+                Storage storage = storageList.get(i);
+
+                Project project = new Project();
+                project.setId(i+1);
+                project.setProjectName(storage.getProjectName());
+                project.setStorageId(storage.getId());
+                project.setUsername(storage.getStorageUsername());
+                project.setDecryptedPassword(projectService.decrypt(storage.getEncryptPassword(), username));
+
+                projectList.add(project);
+            }
+        }
+        model.addAttribute("projects", projectList);
+
+        return "projects";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/projects/details/delete", method = RequestMethod.POST)
+    public JSONObject deleteDetails(@RequestBody String requestBody, Principal principal) {
+        String username = principal.getName();
+        JSONObject jsonObject = JSONObject.parseObject(requestBody);
+        String idStr = jsonObject.getString("id");
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("result", false);
+        resultMap.put("message", "删除失败");
+        resultMap.put("class", "alert alert-danger");
+
+        //id一定不能为空
+        if (!StringUtils.isEmpty(idStr)) {
+            if (userService.existsByUsername(username)) {
+                Long userId = userService.findByUsername(username).getId();//获取用户id
+
+                Storage storage = projectService.findByIdAndUserId(Long.parseLong(idStr), userId);
+                if (null != storage) {//如果存在该条记录
+                    storage.setIsDeleted(true);
+                    storage.setUpdateTime(new Timestamp(System.currentTimeMillis()));
+                    if (projectService.save(storage)) {//更新到数据库成功
+                        resultMap.put("result", true);
+                        resultMap.put("message", "删除成功,3s后自动跳转到查询页");
                         resultMap.put("class", "alert alert-success");
                     }
                 }

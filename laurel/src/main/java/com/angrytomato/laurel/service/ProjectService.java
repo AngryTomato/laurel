@@ -10,4 +10,5 @@ public interface ProjectService {
     String decrypt(byte[] encryptedData, String username);
     List<Storage> findByUserId(Long userId);
     Storage findByIdAndUserId(Long id, Long userId);
+    List<Storage> findByCriteria(Long userId, String criteria);
 }
